@@ -13,7 +13,7 @@
 - The forked repo may be synchronized with the original repo, keeping your copy up to date with any advancements made in the original code.  Any conflicts (the same line edited in both repos) will be identified by Git and presented for manual resolution before deployment.
 
 ## Suggested Workflow
-  ### Code Repositories
+### Code Repositories
   - In GitHub, create a fork of the Service Workbench repo [awslabs/service-workbench-on-aws](https://github.com/awslabs/service-workbench-on-aws).  Your fork may be either public or private. 
   - Clone your GitHub repo `mylogin/service-workbench-on-aws` to your local file system.  This will create a remote repo named `origin`, pointing to your GitHub repo.
       - `git clone mygithub git@github.com:mylogin/service-workbench-on-aws.git`
@@ -106,7 +106,7 @@
 
 ## Custom Configuration Options
 * Configuration key-value pairs may be added to the global Service workbench configuration file `main/config/settings/<stage>.yml`.  Append any required values to this file prior to deployment or redeployment.
-  * ```javascript
+  * ```yaml
     # My custom config value
     myCustomKey: 'someValue'
     ```
@@ -127,7 +127,7 @@
       * `SageMakerLaunchpermissions`
   * To add permissions for a new product, in `cloudformation.yml` create a new policy within `ServiceCatalogLaunchConstraintRole`, following the pattern of the existing policies. The policy may include standard and custom configuration options, as shown above.
   *  Example: Policy for allowing a workspace that creates a bucket. The bucket name stem is defined in a custom setting `myCustomKey`.  Some actions have been removed for brevity.
-      * ```javascript
+      * ```yaml
         # Allow create-bucket workspace
         - PolicyName: S3LaunchPermissions
           PolicyDocument:
