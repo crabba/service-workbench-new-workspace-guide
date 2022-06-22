@@ -13,7 +13,9 @@
 - The forked repo may be synchronized with the original repo, keeping your copy up to date with any advancements made in the original code.  Any conflicts (the same line edited in both repos) will be identified by Git and presented for manual resolution before deployment.
 
 ## Suggested Workflow
+
 ### Code Repositories
+
   - In GitHub, create a fork of the Service Workbench repo [awslabs/service-workbench-on-aws](https://github.com/awslabs/service-workbench-on-aws).  Your fork may be either public or private. 
   - Clone your GitHub repo `mylogin/service-workbench-on-aws` to your local file system.  This will create a remote repo named `origin`, pointing to your GitHub repo.
       - `git clone mygithub git@github.com:mylogin/service-workbench-on-aws.git`
