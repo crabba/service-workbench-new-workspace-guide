@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Creating a Service Workbench-compatible template file &#8212; Service Workbench - Adding a New Product 1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Custom Configuration Options" href="configuration.html" />
+    <link rel="prev" title="Suggested Workflow" href="workflow.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="creating-a-service-workbench-compatible-template-file">
+<span id="create-template-file"></span><h1>Creating a Service Workbench-compatible template file<a class="headerlink" href="#creating-a-service-workbench-compatible-template-file" title="Permalink to this headline">¶</a></h1>
+<p>This section involves adding a new CloudFormation template file to the directory holding the templates for the existing workspace types.  The directory is:</p>
+<p><code class="docutils literal notranslate"><span class="pre">addons/addon-base-raas/packages/base-raas-cfn-templates/src/templates/service-catalog</span></code></p>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>Add the modified CloudFormation template file to this directory, alongside the existing template files (<code class="docutils literal notranslate"><span class="pre">ec2-linux-instance.cfn.yml</span></code> etc). Commit the new file to the Git repository.</p>
+<p>Every template file in this directory will be added to Service Catalog as a product, upon deployment of Service Workbench. If the template file is subsequently modified, a new version of the product will be created in Service Catalog upon redeployment of Service Workbench.  Each new version of a product in Service Catalog will create a new Workspace Type within Service Workbench, which must then be imported and have a Configuration created for it.</p>
+<p>Every product in Service Catalog will have the same :ref: <cite>launch-constraint</cite> assigned to it.  This launch constraint will probably need to be updated with the permissions needed for the new product.</p>
+</section>
+<section id="required-parameters">
+<h2>Required Parameters<a class="headerlink" href="#required-parameters" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>The following Parameters must exist in the template:</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">IsAppStreamEnabled</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EgressStoreIamPolicyDocument</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SolutionNamespace</span></code></p></li>
+</ul>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">IsAppStreamEnabled</span><span class="p">:</span>
+    <span class="nt">Type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">String</span>
+    <span class="nt">AllowedValues</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">true</span><span class="p p-Indicator">,</span> <span class="nv">false</span><span class="p p-Indicator">]</span>
+    <span class="nt">Description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Is AppStream enabled for this workspace</span>
+    <span class="nt">Default</span><span class="p">:</span> <span class="s">&quot;false&quot;</span>
+<span class="nt">EgressStoreIamPolicyDocument</span><span class="p">:</span>
+    <span class="nt">Type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">String</span>
+    <span class="nt">Description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">IAM policy for launched workstation to access egress store</span>
+<span class="nt">SolutionNamespace</span><span class="p">:</span>
+    <span class="nt">Type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">String</span>
+    <span class="nt">Description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Namespace value provided when onboarding Member account</span>
+</pre></div>
+</div>
+</section>
+<section id="additional-parameters">
+<span id="id1"></span><h2>Additional Parameters<a class="headerlink" href="#additional-parameters" title="Permalink to this headline">¶</a></h2>
+<p>You may use any parameters in your product template. Later we will define in Service Workbench a means for entering these parameters when creating a configuration for this product (see <a class="reference internal" href="code-modifications.html#add-workspace-parameters"><span class="std std-ref">Add Workspace Parameters to Configurations</span></a>)</p>
+<p>Example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">MyNewParam</span><span class="p">:</span>
+    <span class="nt">Type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">String</span>
+    <span class="nt">Default</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">foo</span>
+    <span class="nt">AllowedValues</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">foo</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">bar</span>
+    <span class="nt">Description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Gathers my new parameter.  Valid values are &#39;foo&#39; and &#39;bar&#39; (default</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">foo)</span>
+</pre></div>
+</div>
+</section>
+<section id="outputs">
+<h2>Outputs<a class="headerlink" href="#outputs" title="Permalink to this headline">¶</a></h2>
+<p>Add the following Outputs to your CloudFormation template.  Follow the example in e.g.: <code class="docutils literal notranslate"><span class="pre">ec2-linux-instance.cfn.yml</span></code></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">MetaConnection1Name</span></code>: Name for connection</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MetaConnection1Type</span></code>:  Type of workspace</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MetaConnection1Info</span></code>: Supplementary information</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MetaConnection1Url</span></code>: URL for connection to the new workspace</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MetaConnection1Scheme</span></code>: Protocol for connection</p></li>
+</ul>
+<p>Example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">Outputs</span><span class="p">:</span>
+<span class="nt">MetaConnection1Name</span><span class="p">:</span>
+    <span class="nt">Description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Name for bucket</span>
+    <span class="nt">Value</span><span class="p">:</span> <span class="kt">!Ref</span> <span class="l l-Scalar l-Scalar-Plain">Bucket</span>
+<span class="nt">MetaConnection1Url</span><span class="p">:</span>
+    <span class="nt">Description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">URL for bucket</span>
+    <span class="nt">Value</span><span class="p">:</span> <span class="kt">!Join</span> <span class="p p-Indicator">[</span><span class="s">&#39;&#39;</span><span class="p p-Indicator">,</span> <span class="p p-Indicator">[</span><span class="s">&#39;https://s3.console.aws.amazon.com/s3/buckets/&#39;</span><span class="p p-Indicator">,</span> <span class="kt">!Ref</span> <span class="nv">Bucket</span><span class="p p-Indicator">,</span> <span class="s">&quot;?region=&quot;</span><span class="p p-Indicator">,</span> <span class="kt">!Ref</span> <span class="nv">AWS</span><span class="p p-Indicator">::</span><span class="nv">Region</span><span class="p p-Indicator">]]</span>
+<span class="nt">MetaConnection1Scheme</span><span class="p">:</span>
+    <span class="nt">Description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Protocol for bucket</span>
+    <span class="nt">Value</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">https</span>
+<span class="nt">MetaConnection1Type</span><span class="p">:</span>
+    <span class="nt">Description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Type for bucket</span>
+    <span class="nt">Value</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">S3</span>
+<span class="nt">MetaConnection1Info</span><span class="p">:</span>
+    <span class="nt">Description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Info for bucket</span>
+    <span class="nt">Value</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">foo</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Service Workbench - Adding a New Product</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="workflow.html">Suggested Workflow</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Creating a Service Workbench-compatible template file</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#required-parameters">Required Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#additional-parameters">Additional Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#outputs">Outputs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Custom Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adding-product.html">Adding a Product in Service Catalog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code-modifications.html">Service Workbench Code Modifications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes.html">Notes</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="workflow.html" title="previous chapter">Suggested Workflow</a></li>
+      <li>Next: <a href="configuration.html" title="next chapter">Custom Configuration Options</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Andrew Crabb.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/template.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
