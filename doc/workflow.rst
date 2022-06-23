@@ -33,23 +33,25 @@ Perform your local edits and commit to your local dev branch, then when complete
 Sync with Upstream, Push to GitHub
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Your local codebase contains your edits, and before deployment must be merged with any changes made in the main AWS code repository since your last sync or pull from that repo. This synchronization may occur either locally (before pushing to your GitHub repo), or on GitHub, after your edited code has been pushed to your repo.
+
 **Sync option 1: Sync locally**
 
-You may define the original (AWS) repo as a second remote repository (conventionally named ``upstream``), and sync it to your local repo after you have merged your edits to your ``mainline`` branch.
+You may define the original (AWS) repo as a second remote repository (conventionally named ``upstream``), and sync it to your local repo after you have merged your edits to your ``mainline`` branch.  This is performed before pushing the code to the GitHub repo.
 
 ``git remote add upstream https://github.com/awslabs/amazon-service-workbench-on-aws.git``
+
 ``git pull upstream mainline``
 
 **Push to GitHub**
 
-For either sync option, push your local repo to your GitHub repo
+For either sync option, push your local repo to your GitHub repo.  
 
 ``git push origin mainline``
 
 **Sync Option 2: Sync on GitHub**
 
-With your code pushed to your repo in GitHub, sync the AWS code into your code by clicking **Fetch upstream** -> **Fetch and merge**
-Your GitHub repo now holds the Service Workbench source code, including your edits, and up to date with the upstream repo.
+With your code pushed to your repo in GitHub, sync the AWS code into your code by clicking **Fetch upstream** -> **Fetch and merge**. Your GitHub repo now holds the Service Workbench source code, including your edits, and up to date with the upstream repo.
 
 --------------
 CI-CD Pipeline
@@ -66,6 +68,8 @@ The sequence to follow is:
 * Create a config file in ``main/cicd/cicd-pipeline/config/settings/`` by copying ``example-github.yml`` and naming it ``<stage>.yml``.
 * Edit the config file with the details of your GitHub repo.
     * The **awsProfile** value refers to the profile on the build instance used by CodeBuild; use the value ``awsProfile: default``.  
-    * **IMPORTANT**: If you define the ``awsProfile`` value in the ``cicd-pipeline`` config file, you must **not** define the ``awsProfile`` value in the Service Workbench main configuration file (``main/config/settings/<stage.yml``).  Comment out this line.
+
+.. note::
+    If you define the ``awsProfile`` value in the ``cicd-pipeline`` config file, you must **not** define the ``awsProfile`` value in the Service Workbench main configuration file (``main/config/settings/<stage.yml``).  Comment out this line.
 
 Once configured, commits to the GitHub repo specified above will trigger a CodePipeline pipeline which will retrieve the code from GitHub, and deploy Service Workbench using a CodeBuild build project.  You will need to provide access to your GitHub repo using the **Connect to GitHub** mechanism within CodePipeline.

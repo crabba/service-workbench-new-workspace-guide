@@ -16,7 +16,7 @@ Add the modified CloudFormation template file to this directory, alongside the e
 
 Every template file in this directory will be added to Service Catalog as a product, upon deployment of Service Workbench. If the template file is subsequently modified, a new version of the product will be created in Service Catalog upon redeployment of Service Workbench.  Each new version of a product in Service Catalog will create a new Workspace Type within Service Workbench, which must then be imported and have a Configuration created for it.
 
-Every product in Service Catalog will have the same :ref: `launch-constraint` assigned to it.  This launch constraint will probably need to be updated with the permissions needed for the new product.
+Every product in Service Catalog will have the same :ref:`launch-constraint` assigned to it.  This launch constraint will probably need to be updated with the permissions needed for the new product.
 
 -------------------
 Required Parameters
